@@ -1,0 +1,9 @@
+<Config>
+  <!--  OpenNLP Configuration -->
+	  <!-- relative to src/main/resources - include the trailing '/' -->
+  <nlpModelPath>opennlp/models/1.5/</nlpModelPath>
+  <!-- Database Configuration -->
+  <databaseURL>test_db_url</databaseURL>
+  <databaseUsername>db_username</databaseUsername>
+  <databasePassword>db_password</databasePassword>
+</Config>
