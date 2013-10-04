@@ -8,30 +8,54 @@ import sparql.*;
 import java.util.ArrayList;
 import data.Iswc;
 
-public class IswcQuery
+public class IswcQuery extends Endpoints
 {
 	
-	 private String endpoint = Endpoints.iswc;
-	 private ArrayList <String> uris = new ArrayList <String> ();
+	 private String uri;
 	 private ArrayList <Iswc> iswcData = new ArrayList <Iswc> ();
 	 
 	 public ArrayList <Iswc> getIswcData () { return iswcData; }
 	 
-	 public IswcQuery () {
+	 private int getIndex ( String u )
+	 {
+	     int index = -1;
+		 for ( int i=0; i<iswcData.size(); i++ )
+		 {
+			 Iswc iswc = iswcData.get(i);
+			 if ( iswc.getUri() == u ) {
+				index = i;
+				break;
+			 }  
+		 }
+		 return index;
+	 }
+	 
+	 private boolean haveUri ( String u )
+	 {
+		 boolean found = false;
+		 for ( int i=0; i<iswcData.size(); i++ )
+		 {
+			 Iswc iswc = iswcData.get(i);
+			 if ( iswc.getUri() == u ) {
+			   found = true;
+			   break;
+			 }
+		 }
+		 return found;
+	 }
+	 
+	 private String createURI ( String year ) {
 		 
 		 // International Semantic Web Conferences 2007-2012 Proceedings
-		 uris.add("<http://data.semanticweb.org/conference/iswc-aswc/2007/proceedings>");
-		 uris.add("<http://data.semanticweb.org/conference/iswc/2008/proceedings>");
-		 uris.add("<http://data.semanticweb.org/conference/iswc/2009/proceedings>");
-		 uris.add("<http://data.semanticweb.org/conference/iswc/2010/proceedings>");
-		 uris.add("<http://data.semanticweb.org/conference/iswc/2011/proceedings>");
-		 uris.add("<http://data.semanticweb.org/conference/iswc/2012/proceedings>");
+		 uri = "<http://data.semanticweb.org/conference/iswc-aswc/" + year.trim() + "/proceedings>";
+		 return uri;
+		 
 	 }
+	 
      public static void main(String[] args) {
 
-    	 IswcQuery iswc = new IswcQuery ();
-    	 //iswc.testEndpoint( );
-    	 iswc.submitQuery( );
+    	 IswcQuery iswcQuery = new IswcQuery ();
+    	 iswcQuery.submitQuery("2007");
 	 
      }
 
@@ -62,40 +86,54 @@ public class IswcQuery
     	 
      }
      
-	 public void submitQuery( ) {
+	 public void submitQuery( String year ) {
 	        
-		 for ( int i=0; i<uris.size(); i++ ) {
-			 
-			 Iswc iswc = new Iswc ();
-			 ResultSet results = Endpoints.queryEndpoint( endpoint, getQueryString(uris.get(i)) );
-			 while ( results.hasNext() )
-			 {
-				 QuerySolution soln = results.nextSolution();
-				 RDFNode uri = soln.get("?s");
-				 RDFNode abstr = soln.get("?a");
-				 RDFNode firstName = soln.get("?first");
-				 RDFNode lastName = soln.get("?last");
-				 RDFNode sha = soln.get("?sha");
-				 iswc.setSha1( sha.toString() );
-				 iswc.setAbstract( abstr.toString() );
-				 iswc.setUri( uri.toString() );
-				 
-				 // ISWC data is very detailed including multiple versions
-				 // of authors name - such as Jerome Euzenat and JŽr™me Euzenat
-				 // we want to avoid double counting and also we only have
-				 // first initial and last name with AGU data
-				 // here we check that we insert any given author only once
-				 if ( !iswc.authorExists(firstName.toString(), lastName.toString()) )
-				 {
-				   iswc.addAuthor(firstName.toString(), lastName.toString());
-				 }
-			 }
-			 iswcData.add( iswc );
+		uri = createURI( year );
+		ResultSet results = queryEndpoint( this.iswc, getQueryString(uri) );
+		while ( results.hasNext() )
+		{
+			QuerySolution soln = results.nextSolution();
+			RDFNode uri = soln.get("?s");
+			RDFNode abstr = soln.get("?a");
+			RDFNode firstName = soln.get("?first");
+			RDFNode lastName = soln.get("?last");
+			RDFNode sha = soln.get("?sha");
+			String initial = firstName.toString().substring(0, 1); // use first initial to be consistent w/ AGU
+
+			// we are going to get the same uri multiple times because
+			// each result corresponds to a co-author or a different version
+			// of an existing author's name - such as Jerome Euzenat and JŽr™me Euzenat
+			// if we already have this uri then check if we need to add the current
+			// author. otherwise, create a new object
+			if ( haveUri(uri.toString()) )
+			{
+				
+			  Iswc iswc = new Iswc ();
+			  iswc.setSha1( sha.toString() );
+			  iswc.setAbstract( abstr.toString() );
+			  iswc.setUri( uri.toString() );
+			  iswc.addAuthor(initial.trim(), lastName.toString());
+			  iswcData.add(iswc);
+			  
+			} else {
+			  
+			  // we want to avoid double - such as Jerome Euzenat and JŽr™me Euzenat
+			  // and also we only have first initial and last name with AGU data
+			  // here we check that we insert any given author only once
+			  // check for existence of first initial last name
+			  int index = getIndex( uri.toString() );
+			  Iswc currentIswc = iswcData.get(index);
+			  if ( !currentIswc.authorExists(firstName.toString(), lastName.toString()) )
+			  {
+			    currentIswc.addAuthor(initial.trim(), lastName.toString());
+			  }
+			  iswcData.remove(index);
+			  iswcData.add(currentIswc);
+			  
+			} // end else
+
+		} // end while
 		 
-		 } // end for loop over all uris
-
 	 }
-
-	 public void testEndpoint() { Endpoints.testEndpoint( endpoint ); }
 
 }

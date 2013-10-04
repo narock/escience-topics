@@ -15,6 +15,16 @@ public class Configuration {
 	// Configuration Errors
 	ArrayList <String> errorMessages = new ArrayList <String> ();
 	
+	// Year and Database Tables
+	private String year;
+	private String dbCooccurrenceTable;
+	
+	// Minimum Support
+	private double minSupport;
+	
+	// Verbose (output current status)
+	private boolean vbs = false;
+	
 	// Open NLP configuration
 	private String nlpModelPath = null;
 	private SentenceModel sentenceModel = null;
@@ -63,13 +73,21 @@ public class Configuration {
 	public String getDatabasePassword () { return databasePassword; }
 	public ArrayList <String> getErrors () { return errorMessages; }
 	public String getNLPmodelPath () { return nlpModelPath; }
+	public boolean verbose () { return vbs; }
+	public double getMinSupport () { return minSupport; }
+	public String getYear () { return year; }
+	public String getDbCooccurrenceTable () { return dbCooccurrenceTable; }
 	
 	// Setter methods
 	public void setDatabaseURL ( String s ) { databaseURL = s; }
 	public void setDatabaseUsername ( String s ) { databaseUsername = s; }
 	public void setDatabasePassword ( String s ) { databasePassword = s; }
 	public void setNLPmodelPath ( String s ) { nlpModelPath = s; }
-
+	public void setVerbose ( boolean v ) { vbs = v; }
+	public void setMinSupport ( double ms ) { minSupport = ms; }
+    public void setYear ( String y ) { year = y; }
+    public void setDbCooccurrenceTable ( String t ) { dbCooccurrenceTable = t; }
+	
 	public static void main (String[] args)
 	{
 		Configuration config = null;

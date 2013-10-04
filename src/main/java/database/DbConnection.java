@@ -2,7 +2,7 @@ package database;
 
 import java.sql.*;
 
-public class Database {
+public class DbConnection {
 	
 	private String errorMessage = null;
 	private Connection conn = null;

@@ -5,16 +5,14 @@ import com.hp.hpl.jena.query.ResultSet;
 
 import sparql.*;
 
-public class DbpediaQuery 
+public class DbpediaQuery extends Endpoints
 {
-	
-	 private String endpoint = Endpoints.dbpedia;
-	 
+		 
      public static void main(String[] args) {
 
-    	 DbpediaQuery dbpedia = new DbpediaQuery ();
-    	 dbpedia.testEndpoint( );
-    	 ResultSet results = dbpedia.submitQuery( );
+    	 DbpediaQuery endpoint = new DbpediaQuery ();
+    	 endpoint.testEndpoint( endpoint.dbpedia  );
+    	 ResultSet results = endpoint.submitQuery( );
     	 while (results.hasNext())
     	 {
     		 QuerySolution soln = results.nextSolution();
@@ -31,11 +29,9 @@ public class DbpediaQuery
                    "   <http://dbpedia.org/resource/Mars> " +
                    "      <http://dbpedia.org/ontology/abstract> " +
                    "          ?abstract }}";
-		 ResultSet results = Endpoints.queryEndpoint( endpoint, sparqlQueryString );
+		 ResultSet results = queryEndpoint( this.dbpedia, sparqlQueryString );
 		 return results;
 
 	 }
-
-	 public void testEndpoint() { Endpoints.testEndpoint( endpoint ); }
 
 }

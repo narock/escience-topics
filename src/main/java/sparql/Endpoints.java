@@ -8,19 +8,19 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.sparql.engine.http.QueryExceptionHTTP;
 
-public class Endpoints 
+public abstract class Endpoints 
 {
 	
 	// Semantic Web Conference Corpus
-	public static String iswc = "http://data.semanticweb.org/sparql";
+	public final String iswc = "http://data.semanticweb.org/sparql";
 	
 	// DBpedia public sparql endpoint
-	public static String dbpedia = "http://DBpedia.org/sparql";
+	public final String dbpedia = "http://DBpedia.org/sparql";
 	
 	// AGU Rackspace SPARQL Endpoint for abstracts
-	public static String agu = "http://198.61.161.98:8890/sparql";
+	public final String agu = "http://198.61.161.98:8890/sparql";
 	
-	public static ResultSet queryEndpoint ( String endpoint, String sparqlQueryString ) 
+	protected ResultSet queryEndpoint ( String endpoint, String sparqlQueryString ) 
     {
     	Query query = QueryFactory.create(sparqlQueryString);
         ARQ.getContext().setTrue(ARQ.useSAX);
@@ -30,7 +30,7 @@ public class Endpoints
     	return results; 
     }
 	
-	public static void testEndpoint ( String endpoint )
+	public void testEndpoint ( String endpoint )
 	{
 		String queryASK = "ASK { }";
     	Query query = QueryFactory.create(queryASK);

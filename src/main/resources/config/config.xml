@@ -6,4 +6,12 @@
   <databaseURL>test_db_url</databaseURL>
   <databaseUsername>db_username</databaseUsername>
   <databasePassword>db_password</databasePassword>
+  <!-- Verbose -->
+  <verbose>true</verbose>
+  <!-- Minimum Support -->
+  <minSupport>0.5</minSupport>
+  <!-- Year -->
+  <year>2007</year>
+  <!-- Database Table for Occurrence Rates -->
+  <dbOccurrenceTable>coocurrence2007</dbOccurrenceTable>
 </Config>

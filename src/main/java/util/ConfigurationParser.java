@@ -66,7 +66,11 @@ public class ConfigurationParser extends DefaultHandler {
 	  if ( name.equals("databaseUsername") ) this.config.setDatabaseUsername(d);
 	  if ( name.equals("databasePassword") ) this.config.setDatabasePassword(d);
 	  if ( name.equals("nlpModelPath") ) this.config.setNLPmodelPath(d);
-
+	  if ( name.equals("verbose") ) this.config.setVerbose( Boolean.valueOf(d) );
+	  if ( name.equals("minSupport") ) this.config.setMinSupport( Double.valueOf(d) );
+	  if ( name.equals("year") ) this.config.setYear(d);
+	  if ( name.equals("dbOccurrenceTable") ) this.config.setDbCooccurrenceTable(d);
+	  
     }
     
      /** Method for parsing the character data of the XML file
