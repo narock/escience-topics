@@ -38,8 +38,7 @@ public class WimmDex {
 
 
 	  public static void main(String[] args) throws IOException, Exception {
-	    System.out.println("Enter the path where the index will be created: (e.g. tmp/index or c:\\temp\\index)");
-
+	   
 	    String indexLocation = location;
 
 	    TextFileIndexer indexer = null;
