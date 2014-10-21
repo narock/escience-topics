@@ -1,4 +1,4 @@
-package narock;
+package test;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -21,7 +21,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.apache.lucene.search.similarities.DefaultSimilarity;
 import org.apache.lucene.search.similarities.TFIDFSimilarity;
-
+import org.apache.lucene.misc.HighFreqTerms;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -54,6 +54,13 @@ public class WimmDex {
 	    indexer.indexFileOrDirectory(indexLocation);
 	    indexer.closeIndex();
 
+	    // get the high frequency terms
+	    HighFreqTerms highFreq = new HighFreqTerms ();
+
+	    // let's try getting the top 20 terms
+	    // inputs = indexer, top X terms to return, don't know what arg2 and arg3 are
+	    TermStats[] terms = highFreq.getHighFreqTerms(indexer, 20, arg2, arg3)
+	    
 	    //search for a term
 	    IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(indexLocation)));
 	    IndexSearcher searcher = new IndexSearcher(reader);
