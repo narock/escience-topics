@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 
 public class WimmDex {
+	StopAnalyzer
 	  private static StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
 	  private final static String location = "C:\\New folder\\federalist-papers\\texts";
 	  private static String searchTerm = "government";
@@ -54,6 +55,20 @@ public class WimmDex {
 	    indexer.indexFileOrDirectory(indexLocation);
 	    indexer.closeIndex();
 
+	    indexer.getTermVector(docID, CONTENT);
+	    Terms terms = indexer.getTermVector(docID, "fieldName"); //get terms vectors for one document and one field
+	    if (terms != null && terms.size() > 0) {
+	        TermsEnum termsEnum = terms.iterator(null); // access the terms for this field
+	        BytesRef term = null;
+	        while ((term = termsEnum.next()) != null) {// explore the terms for this field
+	            DocsEnum docsEnum = termsEnum.docs(null, null); // enumerate through documents, in this case only one
+	            int docIdEnum;
+	            while ((docIdEnum = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
+	              System.out.println(term.utf8ToString()+" "+docIdEnum+" "+docsEnum.freq()); //get the term frequency in the document
+
+	            }
+	        }
+	    }
 	    // get the high frequency terms
 	    HighFreqTerms highFreq = new HighFreqTerms ();
 
