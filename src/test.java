@@ -63,7 +63,7 @@ public class test {
 		
 		HighFreqTerms hfr = new HighFreqTerms();
 		String[] arg = new String[2];
-		arg[0] = "C:\\Google Drive\\eclipse\\narock\\results";
+		arg[0] = "C:\\temp1";
 		arg[1] = "-t";
 		//hfr.main(arg);
 		
@@ -85,8 +85,7 @@ public class test {
 			System.out.println("Field:" + topTerms[i].field + " term:"+ topTerms[i].termtext.utf8ToString() +  " DocFreq:" + topTerms[i].docFreq);
 			String s = " holla" + dec.decodeTerm(topTerms[i].field, topTerms[i].termtext.utf8ToString());
 			//System.out.println("top terms" + topTerms[i].toString());
-		}
-		
+		}		
 	
 	}
 	protected ResultSet queryEndpoint ( String endpoint, String sparqlQueryString ) 
