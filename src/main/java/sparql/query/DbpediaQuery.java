@@ -5,6 +5,9 @@ import com.hp.hpl.jena.query.ResultSet;
 
 import sparql.*;
 
+// This is simple test query of Dbpedia. Dbpedia is not used in this study.
+// This code is simply a sanity check of SPARQL endpoint querying
+
 public class DbpediaQuery extends Endpoints
 {
 		 

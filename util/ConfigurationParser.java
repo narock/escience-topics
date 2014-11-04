@@ -1,11 +1,13 @@
 package util;
 
+
 import java.io.FileReader;
 import org.xml.sax.Attributes;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.xml.sax.helpers.DefaultHandler;
+
 
 /** An XML Parser for the configuration file 
  * 
@@ -15,7 +17,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ConfigurationParser extends DefaultHandler {
  
 	Configuration config = new Configuration ();
-	StringBuffer accumulator = new StringBuffer();
+    StringBuffer accumulator = new StringBuffer();
     
      /** Parse the config file and return the information in a Configuration object
       * 
@@ -24,12 +26,12 @@ public class ConfigurationParser extends DefaultHandler {
 	  */
     public Configuration parse ( String file ) throws Exception {
     	XMLReader xr = XMLReaderFactory.createXMLReader();
-        ConfigurationParser parser = new ConfigurationParser();
-        xr.setContentHandler(parser);
-        xr.setErrorHandler(parser);
+        ConfigurationParser handler = new ConfigurationParser();
+        xr.setContentHandler(handler);
+        xr.setErrorHandler(handler);
         FileReader r = new FileReader(file);
         xr.parse(new InputSource(r));
-        return parser.config;
+        return handler.config;
     }
 
     public ConfigurationParser() {
@@ -61,10 +63,20 @@ public class ConfigurationParser extends DefaultHandler {
     public void endElement (String uri, String name, String qName) {
 
       String d = accumulator.toString().trim();
-  
-	  if ( name.equals("nlpModelPath") ) this.config.setNLPmodelPath(d);
-	  if ( name.equals("verbose") ) this.config.setVerbose( Boolean.valueOf(d) );
-	  
+  	
+  	  if ( name.equals("WordNetPath") ) this.config.wordNetPath = d;
+      if ( name.equals("WordNetVersion") ) this.config.wordNetVersion = d;
+      if ( name.equals("WordNetCorpus") ) this.config.wordNetCorpus = d;
+      if ( name.equals("WordNetDictPath") ) this.config.wordNetDictPath = d;
+      if ( name.equals("OntFile") ) this.config.ontFile = d;
+      if ( name.equals("MpqaPolarityWordsFile") ) this.config.polarityWordsFile = d;
+      if ( name.equals("PositivePolarityWordsFile") ) this.config.positivePolarityWordsFile = d;
+      if ( name.equals("NegativePolarityWordsFile") ) this.config.negativePolarityWordsFile = d;
+	  if ( name.equals("OutputFile") ) this.config.outputFile = d;
+	  if ( name.equals("SentenceDetector") ) this.config.sentence = d;
+	  if ( name.equals("Tokenizer") ) this.config.tokenizer = d;
+	  if ( name.equals("POS") ) this.config.pos = d;
+	   
     }
     
      /** Method for parsing the character data of the XML file
