@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import util.HashMapSort;
-public class TFIDF {
+public class CalculateTFandDF {
 	
 	public static void main ( String[] args ) {
 		
@@ -64,7 +64,7 @@ public class TFIDF {
 				}
 				
 				// output term frequency from lowest to highest
-				HashMap <String, Integer> sortedMap = sorter.sortByKey( tf );				
+				HashMap <String, Integer> sortedMap = sorter.sortByValue( tf );				
 				sorter.writeSortedHash( sortedMap, tfOutputFile );
 				
 				// reset the term counter for the next abstract
@@ -75,7 +75,7 @@ public class TFIDF {
 		} // end for loop over all abstract files
 		
 		// output the DF results
-		HashMap <String, Integer> sortedMap = sorter.sortByKey( df );
+		HashMap <String, Integer> sortedMap = sorter.sortByValue( df );
 		sorter.writeSortedHash( sortedMap, dfOutputFile );
 		
 	}

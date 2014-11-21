@@ -24,7 +24,7 @@ public class HashMapSort {
 		
 	}
 	
-	public HashMap <String, Integer> sortByKey ( HashMap <String, Integer> map ) {
+	public HashMap <String, Integer> sortByValue ( HashMap <String, Integer> map ) {
 
 		// code modified from example at: http://beginnersbook.com/2013/12/how-to-sort-hashmap-in-java-by-keys-and-values/
 		
@@ -49,5 +49,5 @@ public class HashMapSort {
 		 return sortedHashMap;
 	
 	}
-
+	
 }
