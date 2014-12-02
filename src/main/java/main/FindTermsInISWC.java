@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import data.Iswc;
 import sparql.query.IswcQuery;
 
-public class ComputeDfAguTopics {
+public class FindTermsInISWC {
 		
 	public static void main (String[] args) {
 	
-		ComputeDfAguTopics c = new ComputeDfAguTopics ();
+		FindTermsInISWC c = new FindTermsInISWC ();
 		c.compute( Integer.valueOf(args[0]) );
 		
 	}
@@ -17,8 +17,9 @@ public class ComputeDfAguTopics {
 	private boolean checkForTerms( String text, ArrayList <String> list ) {
 		
 		boolean result = false;
+		text = text.toLowerCase();
 		for ( int i=0; i<list.size(); i++ ) {
-			if ( text.contains( list.get(i)) ) { result = true; }
+			if ( text.contains( list.get(i).toLowerCase() ) ) { result = true; }
 		}
 		return result;
 		

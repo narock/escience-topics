@@ -70,20 +70,27 @@ public class AguQuery extends Endpoints
 		 uri = createURI(year);
 		 
 		 String sparqlQueryString = 
-		      "PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> " +
-			  "PREFIX agu: <http://abstracts.agu.org/ontology#> " +
-		      "PREFIX swrc: <http://swrc.ontoware.org/ontology#> " +
-		      "PREFIX tw: <http://tw.rpi.edu/schema/> " +
-		      "PREFIX foaf: <http://xmlns.com/foaf/0.1/> " +
-			  "select distinct ?abstract ?text ?name where { " +
-			  "  ?s swc:isSubEventOf " + uri + " . " +
-			  "  ?s agu:section <http://abstracts.agu.org/sections/IN> . " +
-			  "  ?abstract swc:relatedToEvent ?s . " +
-		      "  ?abstract swrc:abstract ?text " +
-		      "  ?abstract tw:hasAgentWithRole ?role . " +
-		      "  ?agent tw:hasRole ?role. " +
-		      "  ?agent foaf:name ?name . " +
-			  "} ";
+		      "PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> " + 
+			  "PREFIX agu: <http://abstracts.agu.org/ontology#> " + 
+			  "PREFIX swrc: <http://swrc.ontoware.org/ontology#> " + 
+              "PREFIX tw: <http://tw.rpi.edu/schema/> " +  
+              "PREFIX foaf: <http://xmlns.com/foaf/0.1/> " + 
+			  "select ?abstract ?text where { " + 
+              "  ?section swc:isSubEventOf " + uri + " . " + 
+			  "  ?section agu:section <http://abstracts.agu.org/sections/IN> . " +  
+			  "  ?abstract swc:relatedToEvent ?section . " + 
+              "  ?abstract a agu:Abstract . " +  
+              "  ?abstract swc:hasTopic ?keyword . " + 
+              "  ?abstract swrc:abstract ?text " + 
+			  "  FILTER(  " + 
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1924\" || " +  
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1938\" || " +  
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1958\" || " +  
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1968\" || " +  
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1970\" || " +  
+			  "     STR(?keyword) = \"http://abstracts.agu.org/keywords/1972\" " +  
+			  " ) " + 
+	 		  "}";
 		 
 		 ResultSet results = queryEndpoint( this.agu, sparqlQueryString );
 		 while (results.hasNext())
@@ -91,36 +98,36 @@ public class AguQuery extends Endpoints
     		 QuerySolution soln = results.nextSolution();
     		 RDFNode abstractText = soln.get("?text");
     		 RDFNode abstractUri = soln.get("?abstract");
-    		 RDFNode abstractAuthor = soln.get("?name");
+    		 //RDFNode abstractAuthor = soln.get("?name");
     		
-    		 String name = format.removeDataType(abstractAuthor.toString());
-             String[] names = name.split(",");
+    		 //String name = format.removeDataType(abstractAuthor.toString());
+             //String[] names = name.split(",");
              
     		 // we are going to get the same uri multiple times because
  			 // each result corresponds to a co-author 
  			 // if we already have this uri then check if we need to add the current
  			 // author. otherwise, create a new object
- 			 if ( haveUri(abstractUri.toString()) )
- 			 {
+ 			 //if ( haveUri(abstractUri.toString()) )
+ 			 //{
  				
  			    Agu agu = new Agu ();
  			    agu.setAbstract( format.removeLanguage(abstractText.toString()) );
  			    agu.setUri( abstractUri.toString() );
- 	            agu.addAuthor(names[1],names[0]); // names is Last Name, First Initial
+ 	           // agu.addAuthor(names[1],names[0]); // names is Last Name, First Initial
  			    aguData.add(agu);
  			    
- 			 } else {
+ 			 //} else {
  			   
- 			    int index = getIndex( uri.toString() );
- 			    Agu currentAgu = aguData.get(index);
- 			    if ( !currentAgu.authorExists(names[1],names[0]) )
- 			    {
- 			      currentAgu.addAuthor(names[1],names[0]);
- 			    }
- 			    aguData.remove(index);
- 			    aguData.add(currentAgu);
+ 			   // int index = getIndex( uri.toString() );
+ 			   // Agu currentAgu = aguData.get(index);
+ 			   // if ( !currentAgu.authorExists(names[1],names[0]) )
+ 			   // {
+ 			   //   currentAgu.addAuthor(names[1],names[0]);
+ 			   // }
+ 			   // aguData.remove(index);
+ 			   // aguData.add(currentAgu);
  			  
- 			 } // end else
+ 			 //} // end else
     	 
     	 } // end while
 		 
